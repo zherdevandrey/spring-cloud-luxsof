@@ -1,7 +1,7 @@
 package com.example.processingservice;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,9 +42,23 @@ public class ProcessingRest {
     public Map<Integer, String> getByAccount(@RequestParam("account_id") List<Integer> accountIdList) {
         List<ProcessingEntity> list = repo.findByAccountIdIn(accountIdList);
         Map<Integer, String> map = new HashMap<Integer, String>();
-        for (ProcessingEntity pe: list) {
+        for (ProcessingEntity pe : list) {
             map.put(pe.getAccountId(), pe.getCard());
         }
         return map;
+    }
+
+    @HystrixCommand(fallbackMethod = "testFallBACK")
+    @RequestMapping("/test/{fail}")
+    public String test(@PathVariable boolean fail) {
+        if (fail == true) {
+            throw new RuntimeException("test exception");
+        } else {
+            return "ok";
+        }
+    }
+
+    public String testFallBACK(boolean fail) {
+        return "FAILED";
     }
 }

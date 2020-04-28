@@ -1,0 +1,9 @@
+spring.application.name: dashboard
+spring.cloud.config.uri: http://localhost:8600
+
+server.port: 8900
+
+turbine:
+  aggregator:
+    clusterConfig: PROCESSINGSERVICE
+  appConfig: ProcessingService
