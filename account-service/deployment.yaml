@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: account-service
+  name: account-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-service
+  template:
+    metadata:
+      labels:
+        app: account-service
+    spec:
+      containers:
+        - image: 4544927/luxoft-account-service:0.0.1-SNAPSHOT
+          name: luxsoft-account-service
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RDS_PORT
+              value: "3306"
+            - name: RDS_DB_NAME
+              value: todos
+            - name: RDS_USERNAME
+              value: todos-user
+            - name: RDS_PASSWORD
+              value: dummytodos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-service
+  labels:
+    app: account-service
+  namespace: default
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: account-service
+  type: LoadBalancer
+---

@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: conversion-service
+  name: conversion-service
+  namespace: default
+spec:
+  replicas: 1 
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: conversion-service
+  template:
+    metadata:
+      labels:
+        app: conversion-service
+    spec:
+      containers:
+      - image: 4544927/conversion-service:0.0.4-SNAPSHOT
+        imagePullPolicy: IfNotPresent
+        name: conversion-service
+        ports:
+        - name: liveness-port
+          containerPort: 8100
+        env:
+          - name: EXCHANGE_SERVICE_URI
+            value: http://exchange-service
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: conversion-service
+  name: conversion-service
+  namespace: default
+spec:
+  ports:
+  - port: 8100
+    protocol: TCP
+    targetPort: 8100 
+  selector:
+    app: conversion-service
+  sessionAffinity: None 
+  type: LoadBalancer

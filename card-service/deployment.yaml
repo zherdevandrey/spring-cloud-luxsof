@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: card-service
+  name: card-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: card-service
+  template:
+    metadata:
+      labels:
+        app: card-service
+    spec:
+      containers:
+        - image: 4544927/luxoft-card-service:0.0.10-SNAPSHOT
+          name: luxsoft-card-service
+          ports:
+            - containerPort: 8803
+          volumeMounts:
+            - name: application-config
+              mountPath: /config
+
+      volumes:
+        - name: application-config
+          configMap:
+            name: card-service-config
+            items:
+              - key: application.properties
+                path: application.properties
+
+---
+apiVersion: v1
+data:
+  application.properties: cart.number=5
+kind: ConfigMap
+metadata:
+  name: card-service-config
+  namespace: default
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: card-service
+  labels:
+    app: card-serivice
+  namespace: default
+spec:
+  ports:
+    - port: 8803
+      protocol: TCP
+      targetPort: 8803
+  selector:
+    app: card-service
+  type: LoadBalancer
+---

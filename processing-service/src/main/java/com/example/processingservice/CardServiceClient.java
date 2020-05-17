@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient(value = "CardService", fallback = CardServiceFallBACK.class)
 public interface CardServiceClient {
-    @RequestMapping("create")
+    @RequestMapping("/create")
     String createCard();
 }
 
