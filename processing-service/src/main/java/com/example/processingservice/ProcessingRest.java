@@ -3,10 +3,8 @@ package com.example.processingservice;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -19,6 +17,7 @@ public class ProcessingRest {
     private ProcessingRepository repo;
     private AccountServiceClient accountServiceClient;
     private CardServiceClient cardServiceClient;
+    private Environment environment;
 
     @RequestMapping("/issue/{accountId}")
     public String issueNewCard(@PathVariable Integer accountId) {
@@ -59,7 +58,9 @@ public class ProcessingRest {
         }
     }
 
-    public String testFallBACK(boolean fail) {
-        return "FAILED";
+    @GetMapping("/test/cloud/conf")
+    public String testSpringCloudConfig(){
+        return environment.getProperty("test.cloud.conf");
     }
+
 }

@@ -5,6 +5,8 @@ spring:
     config:
       uri: http://localhost:8600
       name: ConfigService
+    bus:
+      enabled: true
 
 server:
   port: 8804
@@ -13,8 +15,3 @@ feign:
   hystrix:
     enabled: true
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: hystrix.stream

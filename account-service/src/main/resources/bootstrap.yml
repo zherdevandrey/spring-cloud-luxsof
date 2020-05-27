@@ -5,5 +5,7 @@ spring:
     config:
       uri: http://localhost:8600
       name: ConfigService
+    bus:
+      enabled: true
 server:
   port: 8802

@@ -20,7 +20,6 @@ import java.util.stream.StreamSupport;
 @Slf4j
 public class CardRest {
 
-
     @Autowired
     Environment environment;
 
@@ -29,7 +28,7 @@ public class CardRest {
 
     @RequestMapping("/create")
     public String createNewCard() {
-        return environment.getProperty("cart.number") + "----" + generator.generate();
+        return generator.generate();
     }
 
     @PostConstruct
@@ -46,7 +45,6 @@ public class CardRest {
                     } else {
                         log.info("{} - {}", prop, "NON-STRING-VALUE");
                     }
-
                 });
         log.debug("===========================================");
     }

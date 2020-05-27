@@ -1,6 +1,9 @@
 spring:
   application:
     name: Zuul
+  cloud:
+    bus:
+      enabled: true
 
 server:
   port: 8700
@@ -28,3 +31,13 @@ zuul:
       path: /processing/**
       serviceId: ProcessingService
       stripPrefix: true
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream,beans,health,routes,httptrace,bus-refresh
+
+

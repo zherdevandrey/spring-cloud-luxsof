@@ -1,13 +1,11 @@
 spring:
   application:
-    name: card-service
-
+    name: CardService
+  cloud:
+    config:
+      uri: http://localhost:8600
+      name: ConfigService
+    bus:
+      enabled: true
 server:
   port: 8803
-
-eureka:
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://eureka-service:8761
