@@ -28,11 +28,12 @@ public class CardRest {
 
     @RequestMapping("/create")
     public String createNewCard() {
+        log.info("Create card request");
         return generator.generate();
     }
 
     @PostConstruct
-    public void test(){
+    public void logEnvVariables(){
         log.info("====== Environment and configuration ======");
         log.info("Active profiles: {}", Arrays.toString(environment.getActiveProfiles()));
         final MutablePropertySources sources = ((AbstractEnvironment) environment).getPropertySources();

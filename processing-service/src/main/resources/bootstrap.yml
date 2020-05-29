@@ -7,6 +7,13 @@ spring:
       name: ConfigService
     bus:
       enabled: true
+  zipkin:
+    base-url: http://localhost:9411
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1
 
 server:
   port: 8804
@@ -14,4 +21,6 @@ server:
 feign:
   hystrix:
     enabled: true
-
+logging:
+  file:
+    name: /home/user/IdeaProjects/spring-cloud-luxsoft/log/processing.log

@@ -10,5 +10,7 @@ spring:
           password: A@a4544927a
           clone-on-start: true
 
+
 server:
   port: 8600
+
