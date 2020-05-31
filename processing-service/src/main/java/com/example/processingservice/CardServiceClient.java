@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient(value = "CardService", fallback = CardServiceFallBACK.class)
+@FeignClient(value = "account-service", fallback = CardServiceFallBACK.class)
 public interface CardServiceClient {
     @RequestMapping("/create")
     String createCard();

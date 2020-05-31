@@ -1,0 +1,104 @@
+version: '3.7'
+services:
+
+  rabbitmq:
+    image: rabbitmq:3.5.3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+    networks:
+      - currency-compose-network
+
+  config-service:
+    #image: in28min/netflix-eureka-naming-server:0.0.1-SNAPSHOT
+    build:
+      context: config-service
+      dockerfile: Dockerfile
+    ports:
+      - "8600:8600"
+    restart: always
+    networks:
+      - currency-compose-network
+
+  eureka-service:
+    #image: in28min/netflix-eureka-naming-server:0.0.1-SNAPSHOT
+    build:
+      context: eureka-service
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    restart: always
+    depends_on:
+      - config-service
+    networks:
+      - currency-compose-network
+
+  zipkin-server:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "9411:9411"
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - currency-compose-network
+
+  processing-service:
+    #image: in28min/currency-exchange-service:0.0.1-SNAPSHOT
+    build:
+      context: processing-service
+      dockerfile: Dockerfile
+    #    ports:
+    #      - "8803:8803"
+    restart: always
+    depends_on:
+      - eureka-service
+      - config-service
+      - rabbitmq
+      - zipkin-server
+    networks:
+      - currency-compose-network
+
+  card-service:
+    #image: in28min/currency-exchange-service:0.0.1-SNAPSHOT
+    build:
+      context: card-service
+      dockerfile: Dockerfile
+#    ports:
+#      - "8803:8803"
+    restart: always
+    depends_on:
+      - eureka-service
+      - config-service
+      - rabbitmq
+      - zipkin-server
+    networks:
+      - currency-compose-network
+
+  zuul-service:
+    #image: in28min/currency-exchange-service:0.0.1-SNAPSHOT
+    build:
+      context: zuul-service
+      dockerfile: Dockerfile
+    ports:
+      - "8700:8700"
+    restart: always
+    depends_on:
+      - eureka-service
+      - config-service
+      - rabbitmq
+      - zipkin-server
+    networks:
+      - currency-compose-network
+
+
+
+# Networks to be created to facilitate communication between containers
+networks:
+  currency-compose-network:
+    driver: bridge

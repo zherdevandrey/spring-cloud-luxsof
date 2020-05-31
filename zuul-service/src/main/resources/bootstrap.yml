@@ -13,7 +13,7 @@ eureka:
     fetchRegistry: true
     registerWithEureka: false
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-service:8761/eureka
 
 
 zuul:
@@ -39,5 +39,3 @@ management:
     web:
       exposure:
         include: hystrix.stream,beans,health,routes,httptrace,bus-refresh
-
-
